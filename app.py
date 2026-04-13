@@ -5,7 +5,7 @@ import re
 import json
 import os
 
-app = Flask(_name_)
+app = Flask(__name__)
 API_KEY = "paras286"
 
 @app.route("/pan", methods=["GET"])
