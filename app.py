@@ -10,7 +10,7 @@ API_KEY = "paras286"
 
 @app.route("/pan", methods=["GET"])
 def get_pan():
-    key = request.headers.get("x-api-key")
+    key = request.headers.get('x-api-key') or request.args.get('api_Key')
 
     if key != API_KEY:
         return jsonify({"error": "Unauthorized"}), 401
@@ -84,7 +84,7 @@ def fetch_pan(aadhaar):
     }
 
 @app.route("/pan", methods=["GET"])
-def get_pan2():
+def get_pan():
     aadhaar = request.args.get("aadhaar")
 
     if not aadhaar:
