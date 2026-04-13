@@ -1,10 +1,9 @@
-from flask import Flask, request, jsonify
 import requests
 import random
 import re
 import json
 import os
-
+from flask import Flask, request, jsonify
 app = Flask(__name__)
 API_KEY = "paras286"
 
