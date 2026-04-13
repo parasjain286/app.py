@@ -83,15 +83,6 @@ def fetch_pan(aadhaar):
         "full_pan": full_pan
     }
 
-@app.route("/pan", methods=["GET"])
-def get_pan():
-    aadhaar = request.args.get("aadhaar")
-
-    if not aadhaar:
-        return jsonify({"error": "aadhaar parameter required"}), 400
-
-    result = fetch_pan(aadhaar)
-    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
