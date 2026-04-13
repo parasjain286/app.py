@@ -83,7 +83,7 @@ def fetch_pan(aadhaar):
         "full_pan": full_pan
     }
 
-@app.route("/pan2", methods=["GET"])
+@app.route("/pan", methods=["GET"])
 def get_pan2():
     aadhaar = request.args.get("aadhaar")
 
