@@ -5,21 +5,19 @@ import re
 import json
 import os
 
-app = Flask(__name__)
-API_KEY = "paras286"
-
-@app.route("/pan", methods=["GET"])
+@app.route('/pan', methods=['GET'])
 def get_pan():
-    key = request.headers.get('x-api-key') or request.args.get('api_Key')
+    key = request.headers.get('x-api-key') or request.args.get('api_key')
 
     if key != API_KEY:
         return jsonify({"error": "Unauthorized"}), 401
 
-    aadhaar = request.args.get("aadhaar")
+    aadhaar = request.args.get('aadhaar')
     if not aadhaar:
         return jsonify({"error": "aadhaar parameter required"}), 400
 
-    return jsonify({"aadhaar": aadhaar, "status": "ok"})
+    result = fetch_pan(aadhaar)
+    return jsonify(result)
 
 def random_contact():
     return "9" + "".join(str(random.randint(0, 9)) for _ in range(9))
