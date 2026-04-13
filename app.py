@@ -5,9 +5,7 @@ import re
 import json
 import os
 
-rom flask import Flask, request, jsonify
 app = Flask(_name_)
-
 API_KEY = "paras286"
 
 @app.route("/pan", methods=["GET"])
