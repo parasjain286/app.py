@@ -1,25 +1,11 @@
+from flask import Flask, request, jsonify
 import requests
 import random
 import re
 import json
 import os
-from flask import Flask, request, jsonify
+
 app = Flask(__name__)
-API_KEY = "paras286"
-
-@app.route("/pan", methods=["GET"])
-def get_pan():
-    key = request.headers.get("x-api-key")
-
-    if key != API_KEY:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    aadhaar = request.args.get("aadhaar")
-    if not aadhaar:
-        return jsonify({"error": "aadhaar parameter required"}), 400
-
-    return jsonify({"aadhaar": aadhaar, "status": "ok"})
-
 
 def random_contact():
     return "9" + "".join(str(random.randint(0, 9)) for _ in range(9))
@@ -83,6 +69,15 @@ def fetch_pan(aadhaar):
         "full_pan": full_pan
     }
 
+@app.route("/pan", methods=["GET"])
+def get_pan():
+    aadhaar = request.args.get("aadhaar")
+
+    if not aadhaar:
+        return jsonify({"error": "aadhaar parameter required"}), 400
+
+    result = fetch_pan(aadhaar)
+    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
