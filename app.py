@@ -43,17 +43,19 @@ def fetch_pan(aadhaar):
         "contact_number": contact
     }
 
-    # Sensitive personal-data lookup intentionally disabled
-    # Original flow preserved for safe testing/demo
+    res = requests.get(url, headers=headers, params=params, timeout=30)
+    html = res.text
+
     half_pan = None
     full_pan = None
 
-    demo_response = {
-        "demo_mode": True,
-        "requested_url": url,
-        "params_sent": params,
-        "message": "Sensitive lookup disabled. Replace with only lawful, authorized logic for your own records."
-    }
+    half_match = re.search(r'Half PAN.*?([A-Z0-9\*]{10})', html, re.I | re.S)
+    if half_match:
+        half_pan = half_match.group(1)
+
+    full_match = re.search(r'Full PAN Number.*?([A-Z]{5}[0-9]{4}[A-Z])', html, re.I | re.S)
+    if full_match:
+        full_pan = full_match.group(1)
 
     if full_pan:
         save_full_pan({
@@ -64,23 +66,8 @@ def fetch_pan(aadhaar):
     return {
         "aadhaar_number": aadhaar,
         "half_pan": half_pan,
-        "full_pan": full_pan,
-        "contact_number_used": contact,
-        "debug": demo_response
+        "full_pan": full_pan
     }
-
-@app.route("/", methods=["GET"])
-def home():
-    return jsonify({
-        "status": "ok",
-        "message": "Server is running"
-    })
-
-@app.route("/health", methods=["GET"])
-def health():
-    return jsonify({
-        "status": "healthy"
-    })
 
 @app.route("/pan", methods=["GET"])
 def get_pan():
@@ -89,10 +76,8 @@ def get_pan():
     if not aadhaar:
         return jsonify({"error": "aadhaar parameter required"}), 400
 
-    try:
-        result = fetch_pan(aadhaar)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({
-            "error": str(e)
-        }), 500
+    result = fetch_pan(aadhaar)
+    return jsonify(result)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
