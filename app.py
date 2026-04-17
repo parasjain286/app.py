@@ -5,7 +5,7 @@ import re
 import json
 import os
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 def random_contact():
     return "9" + "".join(str(random.randint(0, 9)) for _ in range(9))
@@ -79,5 +79,5 @@ def get_pan():
     result = fetch_pan(aadhaar)
     return jsonify(result)
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     app.run(host="0.0.0.0", port=5000)
